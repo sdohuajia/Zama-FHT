@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "hardhat compile",
+    "build": "node node_modules/hardhat/internal/cli/cli.js compile && node node_modules/typescript/lib/tsc.js -p tsconfig.json",
     "test": "hardhat test",
     "clean": "hardhat clean",
-    "deploy": "hardhat run scripts/deploy.ts --network localhost",
-    "ui": "ts-node scripts/ui-server.ts",
-    "start": "ts-node scripts/start.ts"
+    "deploy": "node node_modules/hardhat/internal/cli/cli.js run scripts/deploy.ts --network localhost",
+    "ui": "node dist/scripts/ui-server.js",
+    "start": "npm run build && node dist/scripts/start.js"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
