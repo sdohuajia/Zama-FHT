@@ -4,8 +4,11 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   console.log("Deploying with:", deployer.address);
 
-  // Placeholder fhEVM precompile address and auction public key
-  const fhePrecompile = "0x0000000000000000000000000000000000000010";
+  // Deploy MockFHE and use its address for constructor to avoid revert
+  const MockFHE = await ethers.getContractFactory("MockFHE");
+  const mock = await MockFHE.deploy();
+  await mock.waitForDeployment();
+  const fhePrecompile = await mock.getAddress();
   const auctionPk = ethers.toUtf8Bytes("demo-auction-pk");
 
   const FHESealedBid = await ethers.getContractFactory("FHESealedBid");
