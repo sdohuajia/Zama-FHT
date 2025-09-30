@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { FHESealedBid__factory } from "../typechain-types";
 
 describe("FHESealedBid", function () {
   async function deployFixture() {
@@ -9,7 +10,7 @@ describe("FHESealedBid", function () {
     const fhe = await MockFHE.deploy();
     await fhe.waitForDeployment();
 
-    const FHESealedBid = await ethers.getContractFactory("FHESealedBid");
+    const FHESealedBid = (await ethers.getContractFactory("FHESealedBid")) as unknown as FHESealedBid__factory;
     const biddingSeconds = 60;
     const revealSeconds = 60;
     const auctionPk = ethers.toUtf8Bytes("auction-pk");
@@ -72,7 +73,7 @@ describe("FHESealedBid", function () {
     await increaseTime(revealSeconds + 1);
     const tx = await c.connect(seller).finalize();
     const rcpt = await tx.wait();
-    const ev = rcpt!.logs.find(l => (l as any).fragment?.name === "Finalized");
+    const ev = rcpt!.logs.find((l: any) => l.fragment?.name === "Finalized");
     expect(ev).to.exist;
   });
 });
